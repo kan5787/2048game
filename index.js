@@ -43,7 +43,7 @@ function drawCell(rowIndex, colIndex) {
 
     if (grid[rowIndex][colIndex] != 0) {
         var number = new PIXI.Text(grid[rowIndex][colIndex], {
-            fontSize: 180,
+            fontSize: 111,
             fill: '#adb4d2'
         });
         number.anchor.set(0.5);
@@ -59,23 +59,60 @@ function getColorByNumber(number) {
         2:0xeceffe,
         4:0xADD8E6
     };
-    return colorValue[number];
+
+    var color=colorValue[number];
+    if(color===undefined){
+        color=0x87CEFF;
+    }
+    return color;
 }
 
-for(var i=0;i<5;i++){
+function addRandomCell() {
     var rowIndex = generateRomderNumber();
     var colIndex = generateRomderNumber();
 
-    grid[rowIndex][colIndex] = 2;
+    while (grid[rowIndex][colIndex]!==0){
+        rowIndex=generateRomderNumber();
+        colIndex=generateRomderNumber();
+    }
 
-    drawCell(rowIndex, colIndex);
+    grid[rowIndex][colIndex] = 2;
 }
 
+addRandomCell();
+addRandomCell();
+
+flushUI();
 
 
 document.addEventListener('keydown', function (event) {
     if (event.key === 'ArrowRight') {
         moveCellToRight();
+        addRandomCell();
+        flushUI();
+    }
+
+    if(event.key==='ArrowUp'){
+        rotateArray(1);
+        moveCellToRight();
+        rotateArray(3);
+        addRandomCell();
+        flushUI();
+    }
+
+    if(event.key==='ArrowLeft'){
+        rotateArray(2);
+        moveCellToRight();
+        rotateArray(2);
+        addRandomCell();
+        flushUI();
+    }
+
+    if(event.key==='ArrowDown'){
+        rotateArray(3);
+        moveCellToRight();
+        rotateArray(1);
+        addRandomCell();
         flushUI();
     }
 });
@@ -110,4 +147,18 @@ function findTheFirstRightCell(rowIndex, columnIndex) {
     }
 
     return -1;
+}
+
+function rotateArray(rotateCount) {
+    for (var i = 0 ; i < rotateCount; i ++) {
+        grid = rotateArrayToRightOnce(grid);
+    }
+
+    function rotateArrayToRightOnce(array) {
+        return array.map(function(row, rowIndex) {
+                return row.map(function (item, columnIndex) {
+                    return array[3 - columnIndex][rowIndex];
+    })
+    })
+    }
 }
