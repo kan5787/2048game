@@ -23,10 +23,7 @@ for(var i=0;i<4;i++){
 
 for(var i=0;i<4;i++){
     for(var j=0;j<4;j++){
-        var graphics = new PIXI.Graphics();
-        graphics.beginFill(0xDCDCDC, 1);
-        graphics.drawRect(app.renderer.width/12+j*210, app.renderer.height/3+i*210, 200, 200);
-        app.stage.addChild(graphics);
+        drawCell(i,j);
     }
 }
 
@@ -34,19 +31,32 @@ function generateRomderNumber() {
     return Math.floor(Math.random()*4);
 }
 
-var x=generateRomderNumber();
-var y=generateRomderNumber();
+function drawCell(rowIndex,colIndex) {
+    var color=0xdcdcdc;
+    if(grid[rowIndex][colIndex]===2){
+        color=0xeceffe;
+    }
+    var graphics = new PIXI.Graphics();
+    graphics.beginFill(color, 1);
+    graphics.drawRect(app.renderer.width / 12 + colIndex * 210, app.renderer.height / 3 + rowIndex * 210, 200, 200);
+    app.stage.addChild(graphics);
 
-var graphics = new PIXI.Graphics();
-graphics.beginFill(0xeceffe, 1);
-graphics.drawRect(app.renderer.width/12+x*210, app.renderer.height/3+y*210, 200, 200);
-app.stage.addChild(graphics);
+    if(grid[rowIndex][colIndex]!=0){
+        var number = new PIXI.Text(grid[rowIndex][colIndex], {
+            fontSize: 180,
+            fill: '#adb4d2'
+        });
+        number.anchor.set(0.5);
+        number.x = app.renderer.width / 12 + colIndex * 210 + 100;
+        number.y = app.renderer.height / 3 + rowIndex * 210 + 100;
+        app.stage.addChild(number);
+    }
+}
 
-var number = new PIXI.Text('2',{
-    fontSize: 180,
-    fill: '#adb4d2'
-});
-number.anchor.set(0.5);
-number.x = app.renderer.width/12+x*210+100;
-number.y = app.renderer.height/3+y*210+100;
-app.stage.addChild(number);
+var rowIndex=generateRomderNumber();
+var colIndex=generateRomderNumber();
+
+grid[rowIndex][colIndex]=2;
+
+drawCell(rowIndex,colIndex);
+
