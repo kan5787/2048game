@@ -26,7 +26,7 @@ for(var i=0;i<4;i++){
     for(var j=0;j<4;j++){
         var graphics = new PIXI.Graphics();
         graphics.beginFill(0xDCDCDC, 1);
-        graphics.drawRect(window.innerWidth/12+j*210, window.innerWidth/5*3+i*210, 200, 200);
+        graphics.drawRect(app.renderer.width/12+j*210, app.renderer.height/3+i*210, 200, 200);
         app.stage.addChild(graphics);
     }
 }
