@@ -4,10 +4,10 @@
 var app = new PIXI.Application(window.innerWidth, window.innerHeight, {backgroundColor: 0xE6E6FA});
 document.body.appendChild(app.view);
 
-var maxCount=16;
-var currentCount=0
+var maxCount = 16;
+var currentCount = 0
 
-var score=0;
+var score = 0;
 
 var style = new PIXI.TextStyle({
     fontFamily: 'Arial',
@@ -22,12 +22,12 @@ basicText.x = app.renderer.width / 3;
 basicText.y = app.renderer.height / 5;
 app.stage.addChild(basicText);
 
-var scoreText = new PIXI.Text('Score'+score, {
-    fontSize:50,
+var scoreText = new PIXI.Text('Score' + score, {
+    fontSize: 50,
     fill: '#B0C4DE'
 });
 scoreText.anchor.set(0.5);
-scoreText.x = app.renderer.width / 7*5;
+scoreText.x = app.renderer.width / 7 * 5;
 scoreText.y = app.renderer.height / 5;
 app.stage.addChild(scoreText);
 
@@ -42,7 +42,7 @@ var flushUI = function () {
             drawCell(i, j);
         }
     }
-    scoreText.text='Score:'+score;
+    scoreText.text = 'Score:' + score;
 };
 flushUI();
 
@@ -84,7 +84,7 @@ function getColorByNumber(number) {
 }
 
 function addRandomCell() {
-    if(currentCount===maxCount)return;
+    if (currentCount === maxCount)return;
 
     var rowIndex = generateRomderNumber();
     var colIndex = generateRomderNumber();
@@ -169,13 +169,13 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
-var hammertime=new Hammer.Manager(document,{
-    recognizers:[
+var hammertime = new Hammer.Manager(document, {
+    recognizers: [
         [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]
     ]
 });
 
-hammertime.on('swiperight', function() {
+hammertime.on('swiperight', function () {
     onToRightEventHandler();
 });
 hammertime.on('swipeup', function () {
@@ -188,7 +188,7 @@ hammertime.on('swipedown', function () {
     onToDownEventHandler();
 });
 function moveCellToRight() {
-    var isChanged=false;
+    var isChanged = false;
 
     for (var rowIndex = 0; rowIndex < 4; rowIndex++) {
         for (var columnIndex = 2; columnIndex >= 0; columnIndex--) {
@@ -198,7 +198,7 @@ function moveCellToRight() {
             if (theEmptyCellIndex !== -1) {
                 grid[rowIndex][theEmptyCellIndex] = grid[rowIndex][columnIndex];
                 grid[rowIndex][columnIndex] = 0;
-                isChanged =true;
+                isChanged = true;
             }
             var currentIndex = theEmptyCellIndex === -1 ? columnIndex : theEmptyCellIndex;
 
@@ -206,7 +206,7 @@ function moveCellToRight() {
                 grid[rowIndex][currentIndex + 1] += grid[rowIndex][currentIndex];
                 grid[rowIndex][currentIndex] = 0;
 
-                score+=grid[rowIndex][currentIndex+1];
+                score += grid[rowIndex][currentIndex + 1];
 
                 isChanged = true;
 
@@ -250,8 +250,8 @@ function checkGameOver() {
         for (var j = 0; j < 4; j++) {
             if (grid[i][j] === grid[i][j - 1] ||
                 grid[i][j] === grid[i][j + 1] ||
-                (grid[i-1] && grid[i][j] === grid[i - 1][j]) ||
-                (grid[i+1] && grid[i][j] === grid[i + 1][j])
+                (grid[i - 1] && grid[i][j] === grid[i - 1][j]) ||
+                (grid[i + 1] && grid[i][j] === grid[i + 1][j])
             ) {
                 return false;
             }
