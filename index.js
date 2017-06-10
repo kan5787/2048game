@@ -60,3 +60,8 @@ grid[rowIndex][colIndex]=2;
 
 drawCell(rowIndex,colIndex);
 
+document.addEventListener('keydown',function (event) {
+    if(event.key==='ArrowRight'){
+        console.log(event);
+    }
+});
