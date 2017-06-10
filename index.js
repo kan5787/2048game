@@ -115,7 +115,7 @@ function onToRightEventHandler() {
     }
 }
 
-function onToDownEventHandler() {
+function onToUpEventHandler() {
     rotateArray(1);
     var isChanged = moveCellToRight();
     rotateArray(3);
@@ -139,7 +139,7 @@ function onToLeftEventHandler() {
         alert('Game over.');
     }
 }
-function onToUpEventHandler() {
+function onToDownEventHandler() {
     rotateArray(3);
     var isChanged = moveCellToRight();
     rotateArray(1);
@@ -157,7 +157,7 @@ document.addEventListener('keydown', function (event) {
     }
 
     if (event.key === 'ArrowUp') {
-        onToDownEventHandler();
+        onToUpEventHandler();
     }
 
     if (event.key === 'ArrowLeft') {
@@ -165,7 +165,7 @@ document.addEventListener('keydown', function (event) {
     }
 
     if (event.key === 'ArrowDown') {
-        onToUpEventHandler();
+        onToDownEventHandler();
     }
 });
 
@@ -185,7 +185,7 @@ hammertime.on('swipeleft', function () {
     onToLeftEventHandler();
 });
 hammertime.on('swipedown', function () {
-    onToDownEventHandler();
+    onToUpEventHandler();
 });
 function moveCellToRight() {
     var isChanged = false;
