@@ -11,37 +11,37 @@ var style = new PIXI.TextStyle({
     fill: '#B0C4DE'
 });
 
-var basicText = new PIXI.Text('2048',style);
-basicText.x = app.renderer.width/12;
-basicText.y = app.renderer.height/5;
+var basicText = new PIXI.Text('2048', style);
+basicText.x = app.renderer.width / 12;
+basicText.y = app.renderer.height / 5;
 
 app.stage.addChild(basicText);
-var grid=[];
-for(var i=0;i<4;i++){
-    grid[i]=[0,0,0,0]
+var grid = [];
+for (var i = 0; i < 4; i++) {
+    grid[i] = [0, 0, 0, 0]
 }
 
-for(var i=0;i<4;i++){
-    for(var j=0;j<4;j++){
-        drawCell(i,j);
+var flushUI=function () {
+    for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+            drawCell(i, j);
+        }
     }
-}
+};
+flushUI();
+
 
 function generateRomderNumber() {
-    return Math.floor(Math.random()*4);
+    return Math.floor(Math.random() * 4);
 }
 
-function drawCell(rowIndex,colIndex) {
-    var color=0xdcdcdc;
-    if(grid[rowIndex][colIndex]===2){
-        color=0xeceffe;
-    }
+function drawCell(rowIndex, colIndex) {
     var graphics = new PIXI.Graphics();
-    graphics.beginFill(color, 1);
+    graphics.beginFill(getColorByNumber(grid[rowIndex][colIndex]), 1);
     graphics.drawRect(app.renderer.width / 12 + colIndex * 210, app.renderer.height / 3 + rowIndex * 210, 200, 200);
     app.stage.addChild(graphics);
 
-    if(grid[rowIndex][colIndex]!=0){
+    if (grid[rowIndex][colIndex] != 0) {
         var number = new PIXI.Text(grid[rowIndex][colIndex], {
             fontSize: 180,
             fill: '#adb4d2'
@@ -53,15 +53,61 @@ function drawCell(rowIndex,colIndex) {
     }
 }
 
-var rowIndex=generateRomderNumber();
-var colIndex=generateRomderNumber();
+function getColorByNumber(number) {
+    var colorValue={
+        0:0xdcdcdc,
+        2:0xeceffe,
+        4:0xADD8E6
+    };
+    return colorValue[number];
+}
 
-grid[rowIndex][colIndex]=2;
+for(var i=0;i<5;i++){
+    var rowIndex = generateRomderNumber();
+    var colIndex = generateRomderNumber();
 
-drawCell(rowIndex,colIndex);
+    grid[rowIndex][colIndex] = 2;
 
-document.addEventListener('keydown',function (event) {
-    if(event.key==='ArrowRight'){
-        console.log(event);
+    drawCell(rowIndex, colIndex);
+}
+
+
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'ArrowRight') {
+        moveCellToRight();
+        flushUI();
     }
 });
+
+function moveCellToRight() {
+    for (var rowIndex = 0; rowIndex < 4; rowIndex++) {
+        for (var columnIndex = 2; columnIndex >= 0; columnIndex--) {
+            if (grid[rowIndex][columnIndex] === 0) continue;
+
+            var theEmptyCellIndex = findTheFirstRightCell(rowIndex, columnIndex);
+            if (theEmptyCellIndex !== -1) {
+                grid[rowIndex][theEmptyCellIndex] = grid[rowIndex][columnIndex];
+                grid[rowIndex][columnIndex] = 0;
+
+            }
+            var currentIndex = theEmptyCellIndex === -1 ? columnIndex : theEmptyCellIndex;
+
+            if (grid[rowIndex][currentIndex] === grid[rowIndex][currentIndex + 1]) {
+                grid[rowIndex][currentIndex+ 1] += grid[rowIndex][currentIndex];
+                grid[rowIndex][currentIndex] = 0;
+            }
+
+        }
+    }
+}
+
+function findTheFirstRightCell(rowIndex, columnIndex) {
+    for (var i = 3; i > columnIndex; i--) {
+        if (grid[rowIndex][i] === 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
